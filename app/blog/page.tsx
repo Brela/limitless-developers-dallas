@@ -1,5 +1,5 @@
 import React from 'react';
 
-const page = () => <div>sa</div>;
+const page = () => <div>This is the blog page</div>;
 
 export default page;

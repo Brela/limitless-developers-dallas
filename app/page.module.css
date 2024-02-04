@@ -3,10 +3,12 @@
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
   border-radius: var(--mantine-radius-md);
   font-weight: 500;
-  text-decoration: none;
+  text-decoration: none; /* This applies to the container, not the <a> tag */
   color: inherit;
+}
 
-  @mixin hover {
-    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
-  }
+.control a {
+  text-decoration: none; /* Remove underline from <a> tags */
+  color: inherit; /* Ensure <a> tags inherit the text color */
+  display: block; /* Optional: Makes the <a> tag fill the container */
 }
