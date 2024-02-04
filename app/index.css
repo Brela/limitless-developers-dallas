@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-underline {
+  text-decoration: underline;
+  text-underline-offset: 0.1em; /* Adjust the distance */
+  text-underline-position: under; /* For better cross-browser compatibility */
+  text-decoration-thickness: 1px;
+}

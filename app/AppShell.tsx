@@ -1,19 +1,21 @@
 'use client';
 
 import '@mantine/core/styles.css';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { MantineProvider, ColorSchemeScript, AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Link from 'next/link'; // Import Link from Next.js
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 import { theme } from '../theme';
 import { ColorSchemeToggle } from '@/components/ColorSchemeToggle/ColorSchemeToggle';
 import classes from './page.module.css';
 import useWindowSize from '@/hooks/use-window-size';
 
 const AppShellContainer = ({ children }: { children: ReactNode }) => {
+  const pathname = usePathname();
   const [opened, { toggle }] = useDisclosure();
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(pathname);
 
   const { isMobile, isDesktop } = useWindowSize();
 
@@ -45,10 +47,26 @@ const AppShellContainer = ({ children }: { children: ReactNode }) => {
             // Other elements for desktop or additional conditional content
             <Group justify="flex-end" style={{ flex: 1 }}>
               <Group ml="xl" gap={0} visibleFrom="sm">
-                {navItems.map((item) => (
-                  <Link key={item.href} href={item.href} className={classes.control}>
-                    {item.label}
-                  </Link>
+                {navItems.map((item, index) => (
+                  <div
+                    key={item.href}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => {
+                      setActive(item.href);
+                      toggle();
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault(); // Prevent scrolling on space press
+                        setActive(item.href);
+                        toggle();
+                      }
+                    }}
+                    className={`${classes.control} ${item.href === active ? classes.active : ''}`}
+                  >
+                    <Link href={item.href}>{item.label}</Link>
+                  </div>
                 ))}
               </Group>
             </Group>
@@ -60,18 +78,23 @@ const AppShellContainer = ({ children }: { children: ReactNode }) => {
       {/* MOBILE NAV */}
       <AppShell.Navbar py="md" px={4}>
         {/* Use Next.js Link components */}
-        {navItems.map((item) => (
+        {navItems.map((item, index) => (
           <div
+            key={item.href}
             role="button"
             tabIndex={0}
-            onClick={() => toggle()}
+            onClick={() => {
+              setActive(item.href);
+              toggle();
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault(); // Prevent scrolling on space press
+                setActive(item.href);
                 toggle();
               }
             }}
-            className={classes.control}
+            className={`${classes.control} ${item.href === active ? classes.active : ''}`}
           >
             <Link href={item.href}>{item.label}</Link>
           </div>
