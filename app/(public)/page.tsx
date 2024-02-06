@@ -8,6 +8,9 @@ export default function HomePage() {
 
   return (
     <>
+      <div className="w-full text-center lg:text-xl pb-2 text-gray-500 font-semibold">
+        YOUR HUB FOR TECH MEETUPS IN DALLAS
+      </div>
       <h1 className=" mx-auto text-lg font-bold">Upcoming Meetups in Dallas</h1>
       <div className="grid grid-cols-12 gap-6">
         {' '}

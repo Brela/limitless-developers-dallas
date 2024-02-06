@@ -1,9 +1,9 @@
 import '@mantine/core/styles.css';
 import React, { useState } from 'react';
 import { MantineProvider, ColorSchemeScript } from '@mantine/core';
-import { theme } from '../theme';
-import './index.css';
-import { ColorSchemeToggle } from '@/components/ColorSchemeToggle/ColorSchemeToggle';
+import { theme } from '../../theme';
+import '../index.css';
+import { ColorSchemeToggle } from '@/app/_components/ColorSchemeToggle/ColorSchemeToggle';
 import AppShellContainer from './AppShell';
 
 export const metadata = {

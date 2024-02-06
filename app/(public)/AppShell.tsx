@@ -7,10 +7,10 @@ import { useDisclosure } from '@mantine/hooks';
 import Link from 'next/link'; // Import Link from Next.js
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { theme } from '../theme';
-import { ColorSchemeToggle } from '@/components/ColorSchemeToggle/ColorSchemeToggle';
+import { theme } from '../../theme';
+import { ColorSchemeToggle } from '@/app/_components/ColorSchemeToggle/ColorSchemeToggle';
 import classes from './page.module.css';
-import useWindowSize from '@/hooks/use-window-size';
+import useWindowSize from '@/app/_hooks/use-window-size';
 
 const AppShellContainer = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
