@@ -1,18 +1,18 @@
 'use client';
 
 import '@mantine/core/styles.css';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { MantineProvider, ColorSchemeScript, AppShell, Burger, Group } from '@mantine/core';
+import React, { ReactNode, useState } from 'react';
+import { AppShell, Burger, Group, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Link from 'next/link'; // Import Link from Next.js
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { theme } from '../../theme';
-import { ColorSchemeToggle } from '@/app/_components/ColorSchemeToggle/ColorSchemeToggle';
+import { usePathname } from 'next/navigation';
 import classes from './page.module.css';
 import useWindowSize from '@/app/_hooks/use-window-size';
+import { ColorSchemeToggle } from '../_components/ColorSchemeToggle/ColorSchemeToggle';
 
-const AppShellContainer = ({ children }: { children: ReactNode }) => {
+const MainShellwNav = ({ children }: { children: ReactNode }) => {
+  const { colorScheme } = useMantineColorScheme();
   const pathname = usePathname();
   const [opened, { toggle }] = useDisclosure();
   const [active, setActive] = useState(pathname);
@@ -63,7 +63,7 @@ const AppShellContainer = ({ children }: { children: ReactNode }) => {
                         toggle();
                       }
                     }}
-                    className={`${classes.control} ${item.href === active ? classes.active : ''}`}
+                    className={`${classes.control} ${item.href === active ? `${colorScheme === 'dark' ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
                   >
                     <Link href={item.href}>{item.label}</Link>
                   </div>
@@ -71,8 +71,8 @@ const AppShellContainer = ({ children }: { children: ReactNode }) => {
               </Group>
             </Group>
           )}
+          <ColorSchemeToggle />
         </Group>
-        {/* <ColorSchemeToggle /> */}
       </AppShell.Header>
 
       {/* MOBILE NAV */}
@@ -94,27 +94,11 @@ const AppShellContainer = ({ children }: { children: ReactNode }) => {
                 toggle();
               }
             }}
-            className={`${classes.control} ${item.href === active ? classes.active : ''}`}
+            className={`${classes.control} ${item.href === active ? `${colorScheme === 'dark' ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
           >
             <Link href={item.href}>{item.label}</Link>
           </div>
         ))}
-        {/*
-        <div>
-          <Link href="/blog" className={classes.control} onClick={() => toggle}>
-            Blog
-          </Link>
-        </div>
-        <div>
-          <Link href="/contacts" className={classes.control} onClick={() => toggle}>
-            Contacts
-          </Link>
-        </div>
-        <div>
-          <Link href="/support" className={classes.control} onClick={() => toggle}>
-            Support
-          </Link>
-        </div> */}
       </AppShell.Navbar>
 
       <AppShell.Main>{children}</AppShell.Main>
@@ -122,4 +106,4 @@ const AppShellContainer = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default AppShellContainer;
+export default MainShellwNav;

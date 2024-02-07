@@ -1,32 +1,34 @@
 import '@mantine/core/styles.css';
-import React, { useState } from 'react';
-import { MantineProvider, ColorSchemeScript } from '@mantine/core';
-import { theme } from '../../theme';
+import React, { useState, ReactNode } from 'react';
+import { MantineProvider, ColorSchemeScript, MantineThemeOverride } from '@mantine/core';
 import '../index.css';
+import ColorSchemeContext from '../_contexts/ColorSchemeContext';
 import { ColorSchemeToggle } from '@/app/_components/ColorSchemeToggle/ColorSchemeToggle';
-import AppShellContainer from './AppShell';
+import Providers from './Providers';
 
-export const metadata = {
+export const metadata: { title: string; description: string } = {
   title: 'Limitless Developers Dallas',
   description: 'Your hub for tech meetups Dallas',
 };
 
-export default function RootLayout({ children }: { children: any }) {
-  return (
-    <html lang="en">
-      <head>
-        <ColorSchemeScript />
-        <link rel="shortcut icon" href="/favicon.png" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
-        />
-      </head>
-      <body>
-        <MantineProvider theme={theme}>
-          <AppShellContainer>{children}</AppShellContainer>
-        </MantineProvider>
-      </body>
-    </html>
-  );
+interface RootLayoutProps {
+  children: ReactNode;
 }
+
+const RootLayout: React.FC<RootLayoutProps> = ({ children }) => (
+  <html lang="en">
+    <head>
+      <ColorSchemeScript />
+      <link rel="shortcut icon" href="/favicon.png" />
+      <meta
+        name="viewport"
+        content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
+      />
+    </head>
+    <body>
+      <Providers>{children}</Providers>
+    </body>
+  </html>
+);
+
+export default RootLayout;
