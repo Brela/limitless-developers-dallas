@@ -22,7 +22,7 @@ const MainShellwNav = ({ children }: { children: ReactNode }) => {
   const navItems = [
     { href: '/', label: 'Hub' },
     // { href: '/pastEvents', label: 'Past Events' },
-    { href: '/blog', label: 'Blog' },
+    // { href: '/blog', label: 'Blog' },
     { href: '/about', label: 'About' },
   ];
 
