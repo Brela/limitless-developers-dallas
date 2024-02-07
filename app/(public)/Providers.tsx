@@ -11,6 +11,7 @@ import useWindowSize from '@/app/_hooks/use-window-size';
 
 import ColorSchemeContext from '../_contexts/ColorSchemeContext';
 import MainShellwNav from './MainShellwNav';
+import { MeetupDataProvider } from '../_contexts/MeetupContext';
 
 const AppShellContainer = ({ children }: { children: ReactNode }) => {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
@@ -23,7 +24,9 @@ const AppShellContainer = ({ children }: { children: ReactNode }) => {
   return (
     <ColorSchemeContext.Provider value={colorSchemeContextValue}>
       <MantineProvider theme={{ colorScheme } as MantineThemeOverride}>
-        <MainShellwNav>{children}</MainShellwNav>
+        <MeetupDataProvider>
+          <MainShellwNav>{children}</MainShellwNav>
+        </MeetupDataProvider>
       </MantineProvider>
     </ColorSchemeContext.Provider>
   );

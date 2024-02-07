@@ -35,13 +35,13 @@ const MainShellwNav = ({ children }: { children: ReactNode }) => {
       <AppShell.Header>
         <Group h="100%" px="md" justify={isMobile ? 'space-between' : ''}>
           {isDesktop && (
-            <Image src="/LDD.png" width={150} height={50} alt="Picture of the author" />
+            <Image src="/LDD.png" priority width={150} height={50} alt="Picture of the author" />
           )}
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           {isMobile ? (
             // This ensures the image is on the right in mobile view
             <Group>
-              <Image src="/LDD.png" width={150} height={50} alt="Picture of the author" />
+              <Image src="/LDD.png" priority width={150} height={50} alt="Picture of the author" />
             </Group>
           ) : (
             // Other elements for desktop or additional conditional content

@@ -9,20 +9,23 @@ const Hub = () => (
   // const isMobile = typeof windowSize?.width === 'number' && windowSize?.width < 768;
 
   <>
-    <div className="w-full text-center lg:text-xl pb-2 text-gray-500 font-semibold">
-      YOUR HUB FOR TECH MEETUPS IN DALLAS
-    </div>
-    <h1 className=" mx-auto text-lg font-bold text-gray-400">Upcoming Meetups in Dallas</h1>
+    {/* <h1 className=" mx-auto text-lg font-bold text-gray-400">Upcoming Meetups in Dallas</h1> */}
     <div className="grid grid-cols-12 gap-6">
       {' '}
       {/* Initialize grid container with 12 columns and set gap */}
       <section className="col-span-12 lg:col-span-8">
-        <div className=" h-[500px] bg-zinc-500 rounded-lg">
+        <div className="w-full text-center lg:text-xl pb-2 text-gray-500 font-semibold">
+          Upcoming Tech Meetups in Dallas
+        </div>
+        <div className=" h-[500px] bg-zinc-200 rounded-lg">
           <MeetupList />
         </div>
       </section>
       <section className="col-span-12 lg:col-span-4">
-        <div className=" h-[500px] bg-zinc-500 rounded-lg">
+        <div className="w-full h-0 lg:h-auto  invisible text-center lg:text-xl pb-2 text-gray-500 font-semibold">
+          Spacer
+        </div>
+        <div className=" h-[500px] bg-zinc-200 rounded-lg">
           {' '}
           <section className="m-auto w-[200px]">this is the Map</section>
         </div>
