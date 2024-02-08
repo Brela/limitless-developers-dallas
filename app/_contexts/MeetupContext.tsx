@@ -1,45 +1,60 @@
 import React, { ReactNode, createContext, useEffect, useState, useContext } from 'react';
+import { getMeetupAccessToken } from '../_api/getMeetupAccessToken';
 
-// Define a TypeScript interface for the context state
 interface MeetupContextTypes {
   accessToken: string | null;
   fetchAccessToken: () => Promise<void>;
+  error: Error | null; // Add an error state to your context
 }
 
-// Create a context with a default value
 export const MeetupContext = createContext<MeetupContextTypes>({
   accessToken: null,
   fetchAccessToken: async () => {},
+  error: null, // Initialize error as null
 });
 
-// Component Props type
 interface MeetupProviderProps {
   children: ReactNode;
 }
 
-export const MeetupDataProvider = ({ children }: MeetupProviderProps) => {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+const MAX_RETRIES = 3;
+const RETRY_INTERVAL = 3000; // 3 seconds
 
-  // Define the function to fetch the access token
+export const MeetupDataProvider = ({ children }: MeetupProviderProps) => {
+  const [accessToken, setAccessToken] = useState<any>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+
   const fetchAccessToken = async () => {
+    // If max retries have been reached, log the error and stop retrying
+    if (retryCount >= MAX_RETRIES) {
+      console.error('Max retries reached.');
+      return;
+    }
+
     try {
-      // Assuming getMeetupAccessToken() returns the access token directly
       const token = await getMeetupAccessToken();
-      console.log(token);
       setAccessToken(token);
-      // Use the access token for further API requests here or pass it down through context
-    } catch (error) {
-      console.error('Error obtaining access token:', error);
+    } catch (err) {
+      console.error('Error obtaining access token:', err);
+      // Increment retry count and set a timer to retry
+      setTimeout(() => {
+        setRetryCount((count) => count + 1);
+      }, RETRY_INTERVAL);
     }
   };
 
-  // Provide the fetchAccessToken function and the accessToken state through context
+  useEffect(() => {
+    fetchAccessToken();
+    // Include retryCount in the dependency array to trigger a retry
+  }, [retryCount]);
+
+  // Provide the fetchAccessToken function, accessToken, and error state through context
   return (
-    <MeetupContext.Provider value={{ accessToken, fetchAccessToken }}>
+    <MeetupContext.Provider value={{ accessToken, fetchAccessToken, error }}>
       {children}
     </MeetupContext.Provider>
   );
 };
 
-// Custom hook to use the context
 export const useMeetupContext = () => useContext(MeetupContext);

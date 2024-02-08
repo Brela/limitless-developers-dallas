@@ -15,13 +15,6 @@ const elements = [
 const MeetupList = () => {
   const { colorScheme } = useMantineColorScheme();
 
-  const { accessToken, fetchAccessToken } = useMeetupContext();
-
-  useEffect(() => {
-    // Fetch the access token when the component mounts
-    fetchAccessToken();
-  }, [fetchAccessToken]);
-
   const rows = elements.map((element) => (
     <Table.Tr key={element.name}>
       <Table.Td className="pl-5">{element.position || '-'}</Table.Td>
