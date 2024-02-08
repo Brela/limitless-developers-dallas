@@ -1,31 +1,33 @@
-'use server';
-
 import jwt from 'jsonwebtoken';
 
-/*
-This uses the jsonwebtoken library to sign a JWT with your RSA private key.
-The JWT includes several claims about the identity of the requestor and the intended audience.
-Output: A signed JWT string.
- */
+// note that all of these thing for jwt in env came from the Meetup Oatch Client dashboarrd except
+// the RSA key, which was generated locally and placed in env
 
 export const generateJWT = (): string => {
   const privateKey = process.env.PRIVATE_RSA_KEY;
+  const signingKeyId = process.env.SIGNING_KEY_ID;
 
   if (!privateKey) {
     throw new Error('The PRIVATE_RSA_KEY env variable is not set.');
   }
 
+  if (!signingKeyId) {
+    throw new Error('The SIGNING_KEY_ID env variable is not set.');
+  }
+
   const token = jwt.sign(
     {
-      iss: process.env.OAUTH_CLIENT_KEY, // Your Meetup OAuth client key
-      // sub: 'YourMeetupMemberID', // Your Meetup member ID
-      aud: 'https://api.meetup.com', // The audience for the JWT
-      // ... other claims ...
+      // Payload
+      iss: process.env.OAUTH_CLIENT_KEY,
+      sub: process.env.MEETUP_MEMBER_ID,
+      aud: 'https://api.meetup.com',
     },
     privateKey,
     {
+      // Sign options
       algorithm: 'RS256',
       expiresIn: '2m',
+      keyid: signingKeyId, // Note that it's keyid, not kid here.
     }
   );
 

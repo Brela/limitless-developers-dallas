@@ -1,9 +1,11 @@
+'use server';
+
 import { generateJWT } from './generateJWT';
 // Adjust the return type to include possible error states
 export const getMeetupAccessToken = async (): Promise<{ accessToken?: string; error?: string }> => {
   try {
     const jwtToken = generateJWT();
-    console.log('JWT Token:', jwtToken);
+
     const response = await fetch('https://secure.meetup.com/oauth2/access', {
       method: 'POST',
       headers: {
@@ -21,7 +23,13 @@ export const getMeetupAccessToken = async (): Promise<{ accessToken?: string; er
 
     const jsonResponse = await response.json();
     console.log('Access Token:', jsonResponse);
-    // Assuming the access token is directly in the jsonResponse
+    // once this is a   proper backend endpoint, return the cookie
+    /*  res.setHeader(
+      'Set-Cookie',
+      `accessToken=${jsonResponse.access_token}; HttpOnly; Secure; Path=/;`
+    );
+    res.status(200).send({ message: 'Access token set in cookie' }); */
+
     return { accessToken: jsonResponse.access_token };
   } catch (error) {
     console.error('Error obtaining access token:', error);

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { ReactNode, createContext, useEffect, useState, useContext } from 'react';
 import { getMeetupAccessToken } from '../_api/getMeetupAccessToken';
 
@@ -26,18 +28,24 @@ export const MeetupDataProvider = ({ children }: MeetupProviderProps) => {
   const [retryCount, setRetryCount] = useState(0);
 
   const fetchAccessToken = async () => {
-    // If max retries have been reached, log the error and stop retrying
     if (retryCount >= MAX_RETRIES) {
       console.error('Max retries reached.');
       return;
     }
 
     try {
-      const token = await getMeetupAccessToken();
-      setAccessToken(token);
+      const response = await fetch('/api/authenticate', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!response.ok) throw new Error('Failed to fetch access token');
+
+      console.log('Access token set in HTTP-only cookie');
+      // You might not get the token back in the response, so set a flag or state indicating success.
+      setAccessToken('success');
     } catch (err) {
       console.error('Error obtaining access token:', err);
-      // Increment retry count and set a timer to retry
+      console.log('Retrying in 3 seconds...');
       setTimeout(() => {
         setRetryCount((count) => count + 1);
       }, RETRY_INTERVAL);
