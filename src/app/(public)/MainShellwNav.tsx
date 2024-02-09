@@ -8,9 +8,9 @@ import Link from 'next/link'; // Import Link from Next.js
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import classes from './page.module.css';
-import useWindowSize from '@/src/hooks/use-window-size';
-import { ColorSchemeToggle } from '../../components/ColorSchemeToggle/ColorSchemeToggle';
-import useColorScheme from '@/src/hooks/useColorScheme';
+import useWindowSize from '@/src/app/hooks/use-window-size';
+import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
+import useColorScheme from '@/src/app/hooks/useColorScheme';
 
 function MainShellwNav({ children }: { children: ReactNode }) {
   const { lightMode, darkMode, colorScheme } = useColorScheme();

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, createContext, useEffect, useState, useContext } from 'react';
-import { getMeetupAccessToken } from '../api/getMeetupAccessToken';
+import { getMeetupAccessToken } from '../../api/getMeetupAccessToken';
 
 interface MeetupContextTypes {
   accessToken: string | null;
@@ -40,8 +40,10 @@ export const MeetupDataProvider = ({ children }: MeetupProviderProps) => {
       }); */
       // if (!response.ok) throw new Error('Failed to fetch access token');
 
-      const token = await getMeetupAccessToken();
+      // make this secure by setting cookies from server
 
+      const token = await getMeetupAccessToken();
+      console.log(token);
       setAccessToken(token);
     } catch (err) {
       console.error('Error obtaining access token:', err);

@@ -4,9 +4,9 @@ import '@mantine/core/styles.css';
 import React, { ReactNode, useState } from 'react';
 import { MantineProvider, MantineThemeOverride } from '@mantine/core';
 
-import ColorSchemeContext from '../../contexts/ColorSchemeContext';
+import ColorSchemeContext from '../contexts/ColorSchemeContext';
 import MainShellwNav from './MainShellwNav';
-import { MeetupDataProvider } from '../../contexts/MeetupContext';
+import { MeetupDataProvider } from '../contexts/MeetupContext';
 
 function AppShellContainer({ children }: { children: ReactNode }) {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');

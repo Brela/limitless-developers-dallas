@@ -3,7 +3,7 @@
 import { Skeleton, Table, useMantineColorScheme } from '@mantine/core';
 import React, { Suspense, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useMeetupContext } from '@/src/contexts/MeetupContext';
+import { useMeetupContext } from '@/src/app/contexts/MeetupContext';
 import { TodoFetch, getTodos } from '@/src/api/getTodos';
 
 const elements = [
