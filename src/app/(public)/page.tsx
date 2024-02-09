@@ -33,7 +33,7 @@ const Hub = () => (
       {/* Ensure any additional content is placed within a grid item or outside the grid container */}
     </div>
     <section className="mt-10">
-      <div>Photos from Past Events</div>
+      <div>Why you should go to some meetups</div>
     </section>
   </>
 );

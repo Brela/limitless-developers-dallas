@@ -17,5 +17,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/quotes': 'off',
     'no-console': 0,
+    '@typescript-eslint/no-use-before-define': 'off',
   },
 };
