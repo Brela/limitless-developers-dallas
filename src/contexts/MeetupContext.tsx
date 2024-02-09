@@ -34,15 +34,15 @@ export const MeetupDataProvider = ({ children }: MeetupProviderProps) => {
     }
 
     try {
-      const response = await fetch('/api/authenticate', {
+      /*    const response = await fetch('/api/authenticate', {
         method: 'POST',
         credentials: 'include',
-      });
-      if (!response.ok) throw new Error('Failed to fetch access token');
+      }); */
+      // if (!response.ok) throw new Error('Failed to fetch access token');
 
-      console.log('Access token set in HTTP-only cookie');
-      // You might not get the token back in the response, so set a flag or state indicating success.
-      setAccessToken('success');
+      const token = await getMeetupAccessToken();
+
+      setAccessToken(token);
     } catch (err) {
       console.error('Error obtaining access token:', err);
       console.log('Retrying in 3 seconds...');

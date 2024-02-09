@@ -10,9 +10,11 @@ import { usePathname } from 'next/navigation';
 import classes from './page.module.css';
 import useWindowSize from '@/src/hooks/use-window-size';
 import { ColorSchemeToggle } from '../../components/ColorSchemeToggle/ColorSchemeToggle';
+import useColorScheme from '@/src/hooks/useColorScheme';
 
-const MainShellwNav = ({ children }: { children: ReactNode }) => {
-  const { colorScheme } = useMantineColorScheme();
+function MainShellwNav({ children }: { children: ReactNode }) {
+  const { lightMode, darkMode, colorScheme } = useColorScheme();
+
   const pathname = usePathname();
   const [opened, { toggle }] = useDisclosure();
   const [active, setActive] = useState(pathname);
@@ -21,9 +23,9 @@ const MainShellwNav = ({ children }: { children: ReactNode }) => {
 
   const navItems = [
     { href: '/', label: 'Hub' },
+    { href: '/about', label: 'About' },
     // { href: '/pastEvents', label: 'Past Events' },
     // { href: '/blog', label: 'Blog' },
-    { href: '/about', label: 'About' },
   ];
 
   return (
@@ -35,13 +37,25 @@ const MainShellwNav = ({ children }: { children: ReactNode }) => {
       <AppShell.Header>
         <Group h="100%" px="md" justify={isMobile ? 'space-between' : ''}>
           {isDesktop && (
-            <Image src="/LDD.png" priority width={150} height={50} alt="Picture of the author" />
+            <Image
+              src={lightMode ? '/ldd-logo-black.png' : '/ldd-logo-white.png'}
+              priority
+              width={133}
+              height={60}
+              alt="Picture of the author"
+            />
           )}
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           {isMobile ? (
             // This ensures the image is on the right in mobile view
             <Group>
-              <Image src="/LDD.png" priority width={150} height={50} alt="Picture of the author" />
+              <Image
+                src={lightMode ? '/ldd-logo-black.png' : '/ldd-logo-white.png'}
+                priority
+                width={128}
+                height={50}
+                alt="Picture of the author"
+              />
             </Group>
           ) : (
             // Other elements for desktop or additional conditional content
@@ -63,7 +77,7 @@ const MainShellwNav = ({ children }: { children: ReactNode }) => {
                         toggle();
                       }
                     }}
-                    className={`${classes.control} ${item.href === active ? `${colorScheme === 'dark' ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
+                    className={`${classes.control} ${item.href === active ? `${darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
                   >
                     <Link href={item.href}>{item.label}</Link>
                   </div>
@@ -104,6 +118,6 @@ const MainShellwNav = ({ children }: { children: ReactNode }) => {
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   );
-};
+}
 
 export default MainShellwNav;

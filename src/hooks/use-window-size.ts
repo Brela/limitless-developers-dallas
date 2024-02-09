@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
 
+// --- USAGE ---
+
+// const { windowSize } = useWindowSize();
+
+// const isMobile = typeof windowSize?.width === 'number' && windowSize?.width < 768;
+
 export default function useWindowSize() {
   const [windowSize, setWindowSize] = useState<{
     width: number | undefined;

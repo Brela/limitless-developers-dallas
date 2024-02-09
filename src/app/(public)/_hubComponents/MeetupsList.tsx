@@ -1,7 +1,7 @@
 'use client';
 
 import { Skeleton, Table, useMantineColorScheme } from '@mantine/core';
-import { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useMeetupContext } from '@/src/contexts/MeetupContext';
 import { TodoFetch, getTodos } from '@/src/api/getTodos';
@@ -60,27 +60,44 @@ export default function MeetupList() {
   );
 }
 
-async function Rows() {
+function Rows() {
   const [todos, setTodos] = useState<TodoFetch[]>([]);
+  const [loading, setLoading] = useState(true); // Initialize loading state
 
   useEffect(() => {
     async function fetchTodos() {
-      const data = await getTodos();
-      console.log('data', data);
-      setTodos(data);
+      try {
+        const data = await getTodos();
+        setTodos(data);
+      } catch (error) {
+        console.error('Failed to fetch todos:', error);
+      } finally {
+        setLoading(false); // Set loading to false when fetching is complete
+      }
     }
 
-    if (todos.length < 1) {
-      fetchTodos();
-    }
-  }, [todos]); // Pass `todos` as a dependency to `useEffect`
+    fetchTodos();
+  }, []);
 
-  console.log('1', todos[0]);
+  if (loading) {
+    return (
+      <>
+        {Array.from({ length: 10 }).map((_, i) => (
+          <Table.Tr key={i}>
+            <Table.Td colSpan={5}>
+              <Skeleton height={40} radius="md" width="100%" />
+            </Table.Td>
+          </Table.Tr>
+        ))}
+      </>
+    );
+  }
+
   return (
     <>
-      {todos.map((todo, i) => (
+      {todos.map((todo) => (
         <Table.Tr key={todo.id}>
-          <Table.Td className="pl-5">{todo.title} </Table.Td>
+          <Table.Td className="pl-5">{todo.title}</Table.Td>
           <Table.Td className="pl-5">-</Table.Td>
           <Table.Td className="pl-5">-</Table.Td>
           <Table.Td className="pl-5">-</Table.Td>
@@ -90,14 +107,3 @@ async function Rows() {
     </>
   );
 }
-
-/* const rows = elements.map((element) => (
-  <Table.Tr key={element.name}>
-    <Table.Td className="pl-5">{element.position || '-'}</Table.Td>
-    <Table.Td className="pl-5 text-slate-700">{element.name || '-'}</Table.Td>
-    <Table.Td className="pl-5 text-slate-700">{element.symbol || '-'}</Table.Td>
-    <Table.Td className="pl-5 text-slate-700">{element.mass || '-'}</Table.Td>
-    <Table.Td className="pl-5 text-slate-700">-</Table.Td>
-  </Table.Tr>
-));
- */
