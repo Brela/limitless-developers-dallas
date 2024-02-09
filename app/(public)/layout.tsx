@@ -1,5 +1,5 @@
 import '@mantine/core/styles.css';
-import React, { useState, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { MantineProvider, ColorSchemeScript, MantineThemeOverride } from '@mantine/core';
 import '../index.css';
 import ColorSchemeContext from '../_contexts/ColorSchemeContext';

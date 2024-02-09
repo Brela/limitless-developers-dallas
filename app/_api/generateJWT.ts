@@ -1,3 +1,5 @@
+'use server';
+
 import jwt from 'jsonwebtoken';
 
 export const generateJWT = (): string => {
