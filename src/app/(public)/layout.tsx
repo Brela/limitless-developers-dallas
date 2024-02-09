@@ -1,9 +1,9 @@
 import '@mantine/core/styles.css';
 import React, { ReactNode } from 'react';
 import { MantineProvider, ColorSchemeScript, MantineThemeOverride } from '@mantine/core';
-import '../index.css';
-import ColorSchemeContext from '../../_contexts/ColorSchemeContext';
-import { ColorSchemeToggle } from '@/src/_components/ColorSchemeToggle/ColorSchemeToggle';
+import '../../index.css';
+import ColorSchemeContext from '../../contexts/ColorSchemeContext';
+import { ColorSchemeToggle } from '@/src/components/ColorSchemeToggle/ColorSchemeToggle';
 import Providers from './Providers';
 
 export const metadata: { title: string; description: string } = {

@@ -3,7 +3,7 @@
 import { Table, useMantineColorScheme } from '@mantine/core';
 import { useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useMeetupContext } from '@/src/_contexts/MeetupContext';
+import { useMeetupContext } from '@/src/contexts/MeetupContext';
 
 const elements = [
   { position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, createContext, useEffect, useState, useContext } from 'react';
-import { getMeetupAccessToken } from '../_api/getMeetupAccessToken';
+import { getMeetupAccessToken } from '../api/getMeetupAccessToken';
 
 interface MeetupContextTypes {
   accessToken: string | null;
