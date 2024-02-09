@@ -7,11 +7,11 @@ import { useDisclosure } from '@mantine/hooks';
 
 import { usePathname } from 'next/navigation';
 
-import useWindowSize from '@/app/_hooks/use-window-size';
+import useWindowSize from '@/src/_hooks/use-window-size';
 
-import ColorSchemeContext from '../_contexts/ColorSchemeContext';
+import ColorSchemeContext from '../../_contexts/ColorSchemeContext';
 import MainShellwNav from './MainShellwNav';
-import { MeetupDataProvider } from '../_contexts/MeetupContext';
+import { MeetupDataProvider } from '../../_contexts/MeetupContext';
 
 const AppShellContainer = ({ children }: { children: ReactNode }) => {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
