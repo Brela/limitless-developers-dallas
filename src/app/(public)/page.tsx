@@ -1,7 +1,7 @@
 // import useWindowSize from '@/hooks/use-window-size';
 
 import { Suspense } from 'react';
-import MeetupList from './_hubComponents/MeetupsList';
+import MeetupList from './_homeComponents/MeetupsList';
 
 const Hub = () => (
   // Invoke the useWindowSize hook and destructure its returned properties

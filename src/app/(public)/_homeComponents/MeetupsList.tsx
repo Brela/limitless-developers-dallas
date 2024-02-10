@@ -3,8 +3,8 @@
 import { Skeleton, Table, useMantineColorScheme } from '@mantine/core';
 import React, { Suspense, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useMeetupContext } from '@/src/app/contexts/MeetupContext';
-import { TodoFetch, getTodos } from '@/src/api/getTodos';
+import { getEventById, getSelf } from '@/src/api/meetup';
+import useColorScheme from '../../hooks/useColorScheme';
 
 const elements = [
   { position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },
@@ -14,7 +14,7 @@ const elements = [
 ];
 
 export default function MeetupList() {
-  const { colorScheme } = useMantineColorScheme();
+  const { lightMode } = useColorScheme();
 
   return (
     <div className="border rounded-md" style={{ maxHeight: '500px', overflowY: 'scroll' }}>
@@ -22,7 +22,7 @@ export default function MeetupList() {
         verticalSpacing="sm"
         stickyHeader
         stickyHeaderOffset={0}
-        className={twMerge(colorScheme === 'light' ? 'bg-white ' : 'bg-black', 'border')}
+        className={twMerge(lightMode ? 'bg-white ' : 'bg-black', 'border')}
       >
         <Table.Thead>
           <Table.Tr>
@@ -50,9 +50,7 @@ export default function MeetupList() {
             <Rows />
           </Suspense>
         </Table.Tbody>
-        <Table.Caption
-          className={twMerge(colorScheme === 'light' ? 'bg-white ' : 'bg-black', 'mt-0 pb-2')}
-        >
+        <Table.Caption className={twMerge(lightMode ? 'bg-white ' : 'bg-black', 'mt-0 pb-2')}>
           End of list
         </Table.Caption>
       </Table>
@@ -61,14 +59,16 @@ export default function MeetupList() {
 }
 
 function Rows() {
-  const [todos, setTodos] = useState<TodoFetch[]>([]);
+  const [todos, setTodos] = useState<any>([]);
   const [loading, setLoading] = useState(true); // Initialize loading state
 
   useEffect(() => {
-    async function fetchTodos() {
+    async function fetchSample() {
       try {
-        const data = await getTodos();
-        setTodos(data);
+        // const data = await getEventById(299001096);
+        const data = await getEventById('299001096');
+        console.log(data?.data?.event?.images);
+        // setTodos(data);
       } catch (error) {
         console.error('Failed to fetch todos:', error);
       } finally {
@@ -76,7 +76,7 @@ function Rows() {
       }
     }
 
-    fetchTodos();
+    fetchSample();
   }, []);
 
   if (loading) {
@@ -95,15 +95,23 @@ function Rows() {
 
   return (
     <>
-      {todos.map((todo) => (
-        <Table.Tr key={todo.id}>
-          <Table.Td className="pl-5">{todo.title}</Table.Td>
-          <Table.Td className="pl-5">-</Table.Td>
-          <Table.Td className="pl-5">-</Table.Td>
-          <Table.Td className="pl-5">-</Table.Td>
-          <Table.Td className="pl-5">-</Table.Td>
+      {Array.isArray(todos) ? (
+        todos.map((todo: any) => (
+          <Table.Tr key={todo.id}>
+            <Table.Td className="pl-5">{todo.title}</Table.Td>
+            <Table.Td className="pl-5">-</Table.Td>
+            <Table.Td className="pl-5">-</Table.Td>
+            <Table.Td className="pl-5">-</Table.Td>
+            <Table.Td className="pl-5">-</Table.Td>
+          </Table.Tr>
+        ))
+      ) : (
+        <Table.Tr h={500}>
+          <Table.Td colSpan={5} className="mx-auto">
+            <div className="flex justify-center items-start h-[20px]">No items found</div>
+          </Table.Td>
         </Table.Tr>
-      ))}
+      )}
     </>
   );
 }

@@ -1,8 +1,14 @@
 'use server';
 
+import { cookies } from 'next/headers';
 import { generateJWT } from './generateJWT';
 // Adjust the return type to include possible error states
-export const getMeetupAccessToken = async (): Promise<{ accessToken?: string; error?: string }> => {
+export const getMeetupAccessToken = async (): Promise<any> => {
+  const existingAccessToken = cookies().get('accessToken');
+  if (existingAccessToken) {
+    return 'meetup access token verified from cookie';
+  }
+
   try {
     const jwtToken = await generateJWT();
 
@@ -23,14 +29,16 @@ export const getMeetupAccessToken = async (): Promise<{ accessToken?: string; er
 
     const jsonResponse = await response.json();
     console.log('Access Token:', jsonResponse);
-    // once this is a proper backend endpoint, return the cookie
-    /*  res.setHeader(
-      'Set-Cookie',
-      `accessToken=${jsonResponse.access_token}; HttpOnly; Secure; Path=/;`
-    );
-    res.status(200).send({ message: 'Access token set in cookie' }); */
 
-    return { accessToken: jsonResponse?.access_token };
+    cookies().set({
+      name: 'accessToken',
+      value: jsonResponse.access_token,
+      httpOnly: true,
+      maxAge: 3600, // one hour, same as meetup token
+      path: '/',
+    });
+
+    return 'cookie set from server to client';
   } catch (error) {
     console.error('Error obtaining access token:', error);
     // Return an object indicating the error
