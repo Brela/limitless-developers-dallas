@@ -15,7 +15,7 @@ interface GraphQLResponse<T> {
 export async function fetchGraphQL<T>(query: string, variables?: any): Promise<GraphQLResponse<T>> {
   // now that we are getting the access token from this function call, we don't need to call it from FE
   const ACCESS_TOKEN = cookies().get('accessToken')?.value;
-  console.log(ACCESS_TOKEN);
+
   if (!ACCESS_TOKEN) {
     await getMeetupAccessToken();
   }
