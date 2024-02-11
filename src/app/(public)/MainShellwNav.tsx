@@ -9,11 +9,11 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import classes from './page.module.css';
 import useWindowSize from '@/src/app/hooks/use-window-size';
-import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
-import useColorScheme from '@/src/app/hooks/useColorScheme';
+import { ColorSchemeToggle } from '../components/ColorSchemeToggle';
+import getColorMode from '../utils/getColorMode';
 
 function MainShellwNav({ children }: { children: ReactNode }) {
-  const { lightMode, darkMode, colorScheme } = useColorScheme();
+  const { lightMode, darkMode } = getColorMode();
 
   const pathname = usePathname();
   const [opened, { toggle }] = useDisclosure();
@@ -62,25 +62,28 @@ function MainShellwNav({ children }: { children: ReactNode }) {
             <Group justify="flex-end" style={{ flex: 1 }}>
               <Group ml="xl" gap={0} visibleFrom="sm">
                 {navItems.map((item, index) => (
-                  <div
-                    key={item.href}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => {
-                      setActive(item.href);
-                      toggle();
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault(); // Prevent scrolling on space press
+                  <Link href={item.href}>
+                    <div
+                      key={item.href}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => {
                         setActive(item.href);
                         toggle();
-                      }
-                    }}
-                    className={`${classes.control} ${item.href === active ? `${darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
-                  >
-                    <Link href={item.href}>{item.label}</Link>
-                  </div>
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault(); // Prevent scrolling on space press
+                          setActive(item.href);
+                          toggle();
+                        }
+                      }}
+                      // className={`${classes.control} ${item.href === active ? `${darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
+                      className={`${classes.control} ${item.href === active ? `${darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
+                    >
+                      {item.label}
+                    </div>
+                  </Link>
                 ))}
               </Group>
             </Group>
@@ -108,7 +111,7 @@ function MainShellwNav({ children }: { children: ReactNode }) {
                 toggle();
               }
             }}
-            className={`${classes.control} ${item.href === active ? `${colorScheme === 'dark' ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
+            className={`${classes.control} ${item.href === active ? `${darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
           >
             <Link href={item.href}>{item.label}</Link>
           </div>

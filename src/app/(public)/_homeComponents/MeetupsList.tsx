@@ -4,7 +4,7 @@ import { Skeleton, Table, useMantineColorScheme } from '@mantine/core';
 import React, { Suspense, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { getEventById, getSelf } from '@/src/api/meetup';
-import useColorScheme from '../../hooks/useColorScheme';
+import getColorMode from '../../utils/getColorMode';
 
 const elements = [
   { position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },
@@ -14,15 +14,19 @@ const elements = [
 ];
 
 export default function MeetupList() {
-  const { lightMode } = useColorScheme();
+  const { lightMode } = getColorMode();
+  const [items, setItems] = useState<any>([]);
 
   return (
-    <div className="border rounded-md" style={{ maxHeight: '500px', overflowY: 'scroll' }}>
+    <div
+      className={twMerge('border rounded-md', lightMode ? 'border-gray-100' : 'border-gray-600')}
+      style={{ maxHeight: '500px', overflowY: 'scroll' }}
+    >
       <Table
         verticalSpacing="sm"
         stickyHeader
         stickyHeaderOffset={0}
-        className={twMerge(lightMode ? 'bg-white ' : 'bg-black', 'border')}
+        className={twMerge(lightMode ? 'bg-white ' : 'bg-zinc-500', 'border')}
       >
         <Table.Thead>
           <Table.Tr>
@@ -47,19 +51,20 @@ export default function MeetupList() {
               </>
             }
           >
-            <Rows />
+            <Rows items={items} setItems={setItems} />
           </Suspense>
         </Table.Tbody>
-        <Table.Caption className={twMerge(lightMode ? 'bg-white ' : 'bg-black', 'mt-0 pb-2')}>
-          End of list
-        </Table.Caption>
+        {items.length > 0 && (
+          <Table.Caption className={twMerge(lightMode ? 'bg-white ' : 'bg-zinc-700', 'mt-0 pb-2')}>
+            End of list
+          </Table.Caption>
+        )}
       </Table>
     </div>
   );
 }
 
-function Rows() {
-  const [todos, setTodos] = useState<any>([]);
+function Rows({ items, setItems }: { items: any; setItems: any }) {
   const [loading, setLoading] = useState(true); // Initialize loading state
 
   useEffect(() => {
@@ -95,8 +100,8 @@ function Rows() {
 
   return (
     <>
-      {Array.isArray(todos) ? (
-        todos.map((todo: any) => (
+      {Array.isArray(items) ? (
+        items.map((todo: any) => (
           <Table.Tr key={todo.id}>
             <Table.Td className="pl-5">{todo.title}</Table.Td>
             <Table.Td className="pl-5">-</Table.Td>

@@ -13,7 +13,7 @@
   display: block; /* Optional: Makes the <a> tag fill the container */
 }
 .active {
-  color: #90ee90; /* Light green color */
+  /* Light green color */
   font-weight: bold; /* Example style */
   /* Other styles for active links */
 }
