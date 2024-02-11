@@ -13,7 +13,6 @@ interface GraphQLResponse<T> {
 }
 
 export async function fetchGraphQL<T>(query: string, variables?: any): Promise<GraphQLResponse<T>> {
-  // now that we are getting the access token from this function call, we don't need to call it from FE
   const ACCESS_TOKEN = cookies().get('accessToken')?.value;
 
   if (!ACCESS_TOKEN) {
@@ -30,13 +29,43 @@ export async function fetchGraphQL<T>(query: string, variables?: any): Promise<G
   });
 
   if (!response.ok) {
-    throw new Error(`Network error: ${response}`);
+    // Parse the response body to access detailed error information
+    const errorBody = await response.text(); // Use .json() if the API returns JSON error responses
+    throw new Error(`Network error: ${response.status} ${response.statusText} - ${errorBody}`);
   }
 
   const res = await response.json();
-  //   console.log(res);
+  if (res.errors) {
+    // Handle GraphQL errors specifically if present
+    const errorMessage = res.errors.map((error: any) => error.message).join(', ');
+    throw new Error(`GraphQL error: ${errorMessage}`);
+  }
 
   return res as Promise<GraphQLResponse<T>>;
+}
+
+// so far this only works for Pro Networks - i.e. L D of Dallas , not L D of Frisco
+// usage:   const data = await getEventsBySlug('limitless-developers-dallas');
+export async function getEventsBySlug(urlName: string) {
+  const query = `
+    query ($urlname: String!) {
+      groupByUrlname(urlname: $urlname) {
+        upcomingEvents(input: {first: 5}, sortOrder: ASC) {
+          edges {
+            node {
+              id
+              title
+              description
+              dateTime
+              imageUrl
+            }
+          }
+        }
+      }
+    }
+    `;
+  const variables = { urlname: urlName };
+  return fetchGraphQL(query, variables);
 }
 
 // THIS ONE WORKS!!!
@@ -81,6 +110,7 @@ export async function getEventById(eventId: string) {
   return fetchGraphQL(query, variables);
 }
 
+//  works
 export async function getSelf() {
   const query = `
     query { self { id name } }

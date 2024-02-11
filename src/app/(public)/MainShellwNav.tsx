@@ -62,7 +62,7 @@ function MainShellwNav({ children }: { children: ReactNode }) {
             <Group justify="flex-end" style={{ flex: 1 }}>
               <Group ml="xl" gap={0} visibleFrom="sm">
                 {navItems.map((item, index) => (
-                  <Link href={item.href}>
+                  <Link href={item.href} key={index}>
                     <div
                       key={item.href}
                       role="button"

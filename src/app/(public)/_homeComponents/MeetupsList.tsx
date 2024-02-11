@@ -3,7 +3,7 @@
 import { Skeleton, Table, useMantineColorScheme } from '@mantine/core';
 import React, { Suspense, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { getEventById, getSelf } from '@/src/api/meetup';
+import { getEventById, getEventsBySlug, getSelf } from '@/src/api/meetup';
 import getColorMode from '../../utils/getColorMode';
 
 const elements = [
@@ -70,10 +70,10 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
   useEffect(() => {
     async function fetchSample() {
       try {
-        // const data = await getEventById(299001096);
-        const data = await getEventById('299001096');
-        console.log(data?.data?.event?.images);
-        // setTodos(data);
+        // const data = await getEventById('299001096');
+        const data = await getEventsBySlug('AWS-Dallas');
+        console.log(data);
+        // setTodos(data)
       } catch (error) {
         console.error('Failed to fetch todos:', error);
       } finally {
