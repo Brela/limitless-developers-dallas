@@ -12,7 +12,7 @@ interface GraphQLResponse<T> {
   errors?: { message: string }[];
 }
 
-export async function fetchGraphQL<T>(query: string, variables?: any): Promise<GraphQLResponse<T>> {
+export async function fetchGraphQL<T>(query: string, variables?: any): Promise<any> {
   const ACCESS_TOKEN = cookies().get('accessToken')?.value;
 
   if (!ACCESS_TOKEN) {
@@ -41,7 +41,7 @@ export async function fetchGraphQL<T>(query: string, variables?: any): Promise<G
     throw new Error(`GraphQL error: ${errorMessage}`);
   }
 
-  return res as Promise<GraphQLResponse<T>>;
+  return res.data as Promise<any>;
 }
 
 // so far this only works for Pro Networks - i.e. L D of Dallas , not L D of Frisco
@@ -50,6 +50,7 @@ export async function getEventsBySlug(urlName: string) {
   const query = `
     query ($urlname: String!) {
       groupByUrlname(urlname: $urlname) {
+        link
         upcomingEvents(input: {first: 5}, sortOrder: ASC) {
           edges {
             node {

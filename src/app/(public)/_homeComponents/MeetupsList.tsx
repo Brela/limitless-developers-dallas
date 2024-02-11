@@ -1,10 +1,14 @@
 'use client';
 
-import { Skeleton, Table, useMantineColorScheme } from '@mantine/core';
+import { Button, Skeleton, Table, useMantineColorScheme } from '@mantine/core';
 import React, { Suspense, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import Image from 'next/image';
+import { IconExternalLink } from '@tabler/icons-react';
 import { getEventById, getEventsBySlug, getSelf } from '@/src/api/meetup';
 import getColorMode from '../../utils/getColorMode';
+import Description from './Description';
+import { DateTimeComponent } from './DateTime';
 
 const elements = [
   { position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },
@@ -30,11 +34,11 @@ export default function MeetupList() {
       >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th className="pl-5">Meetup</Table.Th>
-            <Table.Th className="pl-5">Location</Table.Th>
-            <Table.Th className="pl-5">Going</Table.Th>
-            <Table.Th className="pl-5">Date</Table.Th>
-            <Table.Th className="pl-5">Link</Table.Th>
+            <Table.Th className="pl-5 text-gray-500" />
+            <Table.Th className="pl-5 text-gray-500">Details</Table.Th>
+            <Table.Th className="pl-5 text-gray-500">Desc.</Table.Th>
+
+            <Table.Th className="pl-5 text-gray-500">Link</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody className="">
@@ -70,10 +74,19 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
   useEffect(() => {
     async function fetchSample() {
       try {
-        // const data = await getEventById('299001096');
-        const data = await getEventsBySlug('AWS-Dallas');
+        const res = await getEventsBySlug('AWS-Dallas');
+        console.log(res);
+        // Extract the group link
+        const groupLink = res?.groupByUrlname?.link;
+
+        // Map through the edges to create an array of event objects, including the group link in each
+        const data = res?.groupByUrlname?.upcomingEvents.edges.map((edge: any) => ({
+          ...edge.node, // Spread operator to include all properties of the node
+          groupLink, // Add the group link as a new property in each event object
+        }));
+
         console.log(data);
-        // setTodos(data)
+        setItems(data);
       } catch (error) {
         console.error('Failed to fetch todos:', error);
       } finally {
@@ -97,17 +110,39 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
       </>
     );
   }
-
+  console.log(items);
   return (
     <>
-      {Array.isArray(items) ? (
-        items.map((todo: any) => (
-          <Table.Tr key={todo.id}>
-            <Table.Td className="pl-5">{todo.title}</Table.Td>
-            <Table.Td className="pl-5">-</Table.Td>
-            <Table.Td className="pl-5">-</Table.Td>
-            <Table.Td className="pl-5">-</Table.Td>
-            <Table.Td className="pl-5">-</Table.Td>
+      {items ? (
+        items.map((item: any) => (
+          <Table.Tr key={item.id}>
+            <Table.Td className="pl-5">
+              {' '}
+              <img src={item.imageUrl} alt={item.title} className="w-[300px] min-h-[50px]" />
+            </Table.Td>
+            <Table.Td className="pl-5">
+              <div className="font-semibold text-lg mb-5">{item.title}</div>
+              <div>
+                <DateTimeComponent dateTime={item.dateTime} />
+              </div>
+            </Table.Td>
+            <Table.Td className="pl-5 w-[30%]">
+              <Description description={item.description} />
+            </Table.Td>
+
+            <Table.Td className="pl-5">
+              <a
+                className="underline whitespace-nowrap xl:basis-1/3 rounded-sm text-sm font-medium py-1  hover:text-cyan-200 hover:border-accent-green"
+                // style={{ boxShadow: "1px 1px 10px rgba(220, 222, 224, .8)" }}
+                href={item.groupLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button>
+                  <IconExternalLink size={20} className="text-gray-700" />
+                </Button>
+              </a>
+            </Table.Td>
           </Table.Tr>
         ))
       ) : (
