@@ -72,29 +72,38 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
   const [loading, setLoading] = useState(true); // Initialize loading state
 
   useEffect(() => {
-    async function fetchSample() {
+    async function fetchAllSamples(slugs: string[]) {
       try {
-        const res = await getEventsBySlug('AWS-Dallas');
-        console.log(res);
-        // Extract the group link
-        const groupLink = res?.groupByUrlname?.link;
+        // Parallel fetch requests for each slug
+        const results = await Promise.all(slugs.map((slug) => getEventsBySlug(slug)));
 
-        // Map through the edges to create an array of event objects, including the group link in each
-        const data = res?.groupByUrlname?.upcomingEvents.edges.map((edge: any) => ({
-          ...edge.node, // Spread operator to include all properties of the node
-          groupLink, // Add the group link as a new property in each event object
-        }));
+        // Process all results
+        const data = results.flatMap((res) =>
+          res?.groupByUrlname?.upcomingEvents.edges.map((edge: any) => ({
+            ...edge.node,
+            groupLink: res?.groupByUrlname?.link,
+          }))
+        );
+        // Sort the events by dateTime
+        const sortedData = data.sort(
+          (a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()
+        );
 
-        console.log(data);
-        setItems(data);
+        setItems(sortedData);
       } catch (error) {
-        console.error('Failed to fetch todos:', error);
+        console.error('Failed to fetch data:', error);
       } finally {
-        setLoading(false); // Set loading to false when fetching is complete
+        setLoading(false);
       }
     }
 
-    fetchSample();
+    const slugs = [
+      'AWS-Dallas',
+      'reactjsdallas',
+      'dallas-software-developers-meetup',
+      'plano-prompt-engineers',
+    ];
+    fetchAllSamples(slugs);
   }, []);
 
   if (loading) {

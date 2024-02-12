@@ -51,7 +51,7 @@ export async function getEventsBySlug(urlName: string) {
     query ($urlname: String!) {
       groupByUrlname(urlname: $urlname) {
         link
-        upcomingEvents(input: {first: 5}, sortOrder: ASC) {
+        upcomingEvents(input: {first: 1}, sortOrder: ASC) {
           edges {
             node {
               id

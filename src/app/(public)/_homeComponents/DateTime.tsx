@@ -9,7 +9,7 @@ export const DateTimeComponent = ({ dateTime }: { dateTime: string }) => {
   return (
     <div>
       <div>
-        Date: <span className="pl-2 font-semibold">{date}</span>
+        Date: <span className="pl-2 text-lg text-orange-300 font-semibold">{date}</span>
       </div>
       <div>
         Time: <span className="pl-2 font-semibold">{time}</span>
