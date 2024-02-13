@@ -34,7 +34,7 @@ export const getMeetupAccessToken = async (): Promise<any> => {
       name: 'accessToken',
       value: jsonResponse.access_token,
       httpOnly: true,
-      maxAge: 3600, // one hour, same as meetup token
+      maxAge: 3550, // duration is almost one hour, same as meetup token
       path: '/',
     });
 

@@ -108,9 +108,9 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
           <Table.Tr key={item.id}>
             <Table.Td className="pl-5">
               {' '}
-              <img src={item.imageUrl} alt={item.title} className="w-[300px] min-h-[50px]" />
+              <img src={item.imageUrl} alt={item.title} className="min-w-[280px] min-h-[50px]" />
             </Table.Td>
-            <Table.Td className="pl-5">
+            <Table.Td className="pl-5 w-[20%]">
               <div className="font-semibold text-lg mb-5">{item.title}</div>
               <div>
                 <DateTimeComponent dateTime={item.dateTime} />
