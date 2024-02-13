@@ -9,6 +9,7 @@ import { fetchAllEvents } from '@/src/api/meetup';
 import getColorMode from '../../utils/getColorMode';
 import Description from './Description';
 import { DateTimeComponent } from './DateTime';
+import useWindowSize from '../../hooks/use-window-size';
 
 export default function MeetupList() {
   const { lightMode } = getColorMode();
@@ -44,6 +45,7 @@ export default function MeetupList() {
 function Rows({ items, setItems }: { items: any; setItems: any }) {
   const { lightMode } = getColorMode();
   const [loading, setLoading] = useState(true); // Initialize loading state
+  const { isMobile, isDesktop } = useWindowSize();
 
   useEffect(() => {
     async function getEvents() {
@@ -72,6 +74,18 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
       </>
     );
   }
+
+  function ImgComp({ item }: { item: any }) {
+    return (
+      //  <Image src={item.imageUrl} alt={item.title} height={400} width={600} />
+      <img
+        src={item.imageUrl}
+        alt={item.title}
+        className="min-w-[280px] w-[30vw] max-w-[800px] min-h-[50px] max-h-[200px] lg:max-h-[400px]"
+      />
+    );
+  }
+
   console.log(items);
   return (
     <>
@@ -90,6 +104,11 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
                   <DateTimeComponent dateTime={item.dateTime} />
                 </div>
               </div>
+              {isMobile && (
+                <div className="w-[50%]">
+                  <ImgComp item={item} />
+                </div>
+              )}
               <div className="">
                 <Description description={item.description} />
               </div>
@@ -113,13 +132,11 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
                 </Button>
               </a>
             </section>
-            <div className="w-[50%]">
-              <img
-                src={item.imageUrl}
-                alt={item.title}
-                className="min-w-[280px] w-[30vw] max-w-[800px] min-h-[50px] max-h-[200px] lg:max-h-[400px]"
-              />
-            </div>
+            {isDesktop && (
+              <div className="w-[50%]">
+                <ImgComp item={item} />
+              </div>
+            )}
           </section>
         ))
       ) : (
