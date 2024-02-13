@@ -5,7 +5,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Image from 'next/image';
 import { IconExternalLink } from '@tabler/icons-react';
-import { getEventById, getEventsBySlug, getSelf } from '@/src/api/meetup';
+import { fetchAllEvents } from '@/src/api/meetup';
 import getColorMode from '../../utils/getColorMode';
 import Description from './Description';
 import { DateTimeComponent } from './DateTime';
@@ -72,24 +72,11 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
   const [loading, setLoading] = useState(true); // Initialize loading state
 
   useEffect(() => {
-    async function fetchAllSamples(slugs: string[]) {
+    async function getEvents() {
       try {
-        // Parallel fetch requests for each slug
-        const results = await Promise.all(slugs.map((slug) => getEventsBySlug(slug)));
+        const data = await fetchAllEvents();
 
-        // Process all results
-        const data = results.flatMap((res) =>
-          res?.groupByUrlname?.upcomingEvents.edges.map((edge: any) => ({
-            ...edge.node,
-            groupLink: res?.groupByUrlname?.link,
-          }))
-        );
-        // Sort the events by dateTime
-        const sortedData = data.sort(
-          (a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()
-        );
-
-        setItems(sortedData);
+        setItems(data);
       } catch (error) {
         console.error('Failed to fetch data:', error);
       } finally {
@@ -97,13 +84,7 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
       }
     }
 
-    const slugs = [
-      'AWS-Dallas',
-      'reactjsdallas',
-      'dallas-software-developers-meetup',
-      'plano-prompt-engineers',
-    ];
-    fetchAllSamples(slugs);
+    getEvents();
   }, []);
 
   if (loading) {

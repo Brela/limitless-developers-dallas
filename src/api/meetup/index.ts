@@ -12,7 +12,7 @@ interface GraphQLResponse<T> {
   errors?: { message: string }[];
 }
 
-export async function fetchGraphQL<T>(query: string, variables?: any): Promise<any> {
+export async function fetchGraphQL(query: string, variables?: any): Promise<any> {
   const ACCESS_TOKEN = cookies().get('accessToken')?.value;
 
   if (!ACCESS_TOKEN) {
@@ -42,6 +42,46 @@ export async function fetchGraphQL<T>(query: string, variables?: any): Promise<a
   }
 
   return res.data as Promise<any>;
+}
+
+export async function fetchAllEvents() {
+  const slugs = [
+    'AWS-Dallas',
+    'reactjsdallas',
+    'dallas-software-developers-meetup',
+    'plano-prompt-engineers',
+  ];
+  try {
+    const results = await Promise.all(
+      slugs.map((slug) =>
+        getEventsBySlug(slug).catch((error) => {
+          console.error(`Error fetching events for slug ${slug}:`, error);
+          return null;
+        })
+      )
+    );
+
+    // Filter out any null results due to errors
+    const validResults = results.filter((result) => result !== null);
+
+    // Assuming validResults now contains only the successful fetches
+    const data = validResults.flatMap((res) =>
+      res?.groupByUrlname?.upcomingEvents.edges.map((edge: any) => ({
+        ...edge.node,
+        groupLink: res?.groupByUrlname?.link,
+      }))
+    );
+
+    // Sort the events by dateTime
+    const sortedData = data.sort(
+      (a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()
+    );
+
+    return sortedData;
+  } catch (error) {
+    console.error('Failed to fetch data with unexpected error:', error);
+    throw error;
+  }
 }
 
 // so far this only works for Pro Networks - i.e. L D of Dallas , not L D of Frisco
