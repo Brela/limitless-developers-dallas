@@ -36,17 +36,15 @@ const Hub = () => {
       {/*  ------ MEETUP LIST SECTION ------ */}
       <SectionMain>
         <H2>Upcoming Tech Meetups in Dallas</H2>
-        <div
-          className={twMerge(' h-[500px]  rounded-lg', lightMode ? 'bg-zinc-200' : 'bg-zinc-500')}
-        >
+        <div className={twMerge('  rounded-lg mb-20', lightMode ? 'bg-zinc-200' : 'bg-zinc-500')}>
           <MeetupList />
         </div>
       </SectionMain>
 
       {/*  ------ OTHER ------ */}
-      <SectionMain>
+      {/*       <SectionMain>
         <H2>Why you should go to meetups</H2>
-      </SectionMain>
+      </SectionMain> */}
     </>
   );
 };

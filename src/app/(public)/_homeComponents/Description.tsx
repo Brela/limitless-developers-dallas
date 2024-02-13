@@ -10,8 +10,9 @@ interface Props {
 }
 
 const Description = ({ description }: Props) => {
+  const { lightMode } = getColorMode();
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const charLimit = 250;
+  const charLimit = 300;
 
   const { darkMode } = getColorMode();
 
@@ -26,18 +27,22 @@ const Description = ({ description }: Props) => {
             <Popover.Target>
               <Button
                 className={twMerge(
-                  ' font-semibold ',
-                  darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f]'
+                  'pl-1 pb-[1px] text-md inline font-bold text-orange-500'
+                  // darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f]'
                 )}
               >
                 more...
               </Button>
             </Popover.Target>
-            <Popover.Dropdown className="bg-gray-500" bg="#90ee90" w="70vw">
+            <Popover.Dropdown
+              className="bg-gray-500 ml-[15vw]"
+              bg={lightMode ? '#e7e5e4' : '#3f3f46'}
+              w="70vw"
+            >
               <Text size="lg">{description}</Text>
             </Popover.Dropdown>
           </Popover>
-          <span className="inline">
+          {/*  <span className="inline">
             {!showFullDescription ? (
               <button
                 type="button"
@@ -61,7 +66,7 @@ const Description = ({ description }: Props) => {
                 ...less
               </button>
             )}
-          </span>
+          </span> */}
         </>
       )}
     </p>

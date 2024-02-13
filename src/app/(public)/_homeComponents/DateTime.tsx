@@ -1,19 +1,13 @@
 import React from 'react';
+import { format, parseISO } from 'date-fns';
 
 export const DateTimeComponent = ({ dateTime }: { dateTime: string }) => {
-  // Split the dateTime string into date and time parts
-  const [date, timeWithZone] = dateTime.split('T');
-  // Optionally, remove the timezone information if you don't need to display it
-  const time = timeWithZone.split('-')[0];
+  const date = parseISO(dateTime);
+  const formattedDate = format(date, "EEE, MMM do 'at' h:mma");
 
   return (
     <div>
-      <div>
-        Date: <span className="pl-2 text-lg text-orange-300 font-semibold">{date}</span>
-      </div>
-      <div>
-        Time: <span className="pl-2 font-semibold">{time}</span>
-      </div>
+      <span className=" text-lg text-orange-500 font-semibold">{formattedDate}</span>
     </div>
   );
 };

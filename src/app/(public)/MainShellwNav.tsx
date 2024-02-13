@@ -7,6 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 import Link from 'next/link'; // Import Link from Next.js
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 import classes from './page.module.css';
 import useWindowSize from '@/src/app/hooks/use-window-size';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle';
@@ -79,7 +80,10 @@ function MainShellwNav({ children }: { children: ReactNode }) {
                         }
                       }}
                       // className={`${classes.control} ${item.href === active ? `${darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
-                      className={`${classes.control} ${item.href === active ? `${darkMode ? 'text-[#90ee90] ' : 'text-[#5fcf5f] '} font-bold` : ''}`}
+                      className={twMerge(
+                        classes.control,
+                        item.href === active ? 'text-orange-500 font-bold' : ''
+                      )}
                     >
                       {item.label}
                     </div>

@@ -11,6 +11,7 @@ export function ColorSchemeToggle() {
   useEffect(() => {
     // Access localStorage only when the component is mounted on the client side
     const mode = localStorage.getItem('color-scheme');
+    console.log(mode);
     setLightMode(mode === 'light');
   }, []);
 
