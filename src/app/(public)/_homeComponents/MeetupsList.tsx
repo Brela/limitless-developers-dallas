@@ -3,6 +3,7 @@
 import { Button, Skeleton, Table, useMantineColorScheme } from '@mantine/core';
 import React, { Suspense, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { UseQueryResult, useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { IconExternalLink } from '@tabler/icons-react';
 import { fetchAllEvents } from '@/src/api/meetup';
@@ -13,10 +14,19 @@ import useWindowSize from '../../hooks/use-window-size';
 
 export default function MeetupList() {
   const { lightMode } = getColorMode();
-  const [items, setItems] = useState<any>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const { data: items, isLoading: loading } = useQuery({
+    queryKey: ['events'],
+    queryFn: async () => {
+      const response = await fetchAllEvents();
+      const data: any = response || [];
+
+      return data;
+    },
+    staleTime: 300000, // 5 minutes
+  }) as UseQueryResult<any[], Error>;
+
+  /*   useEffect(() => {
     async function getEvents() {
       try {
         const data = await fetchAllEvents();
@@ -29,7 +39,7 @@ export default function MeetupList() {
     }
 
     getEvents();
-  }, []);
+  }, []); */
 
   return (
     <section

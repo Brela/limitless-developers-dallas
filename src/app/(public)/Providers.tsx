@@ -3,6 +3,7 @@
 import '@mantine/core/styles.css';
 import React, { ReactNode, useState } from 'react';
 import { MantineProvider, MantineThemeOverride } from '@mantine/core';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import ColorSchemeContext from '../contexts/ColorSchemeContext';
 import MainShellwNav from './MainShellwNav';
@@ -16,14 +17,18 @@ function AppShellContainer({ children }: { children: ReactNode }) {
     onChange: setColorScheme,
   };
 
+  const queryClient = new QueryClient();
+
   return (
-    <ColorSchemeContext.Provider value={colorSchemeContextValue}>
-      <MantineProvider theme={{ colorScheme } as MantineThemeOverride}>
-        <MeetupDataProvider>
-          <MainShellwNav>{children}</MainShellwNav>
-        </MeetupDataProvider>
-      </MantineProvider>
-    </ColorSchemeContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <ColorSchemeContext.Provider value={colorSchemeContextValue}>
+        <MantineProvider theme={{ colorScheme } as MantineThemeOverride}>
+          <MeetupDataProvider>
+            <MainShellwNav>{children}</MainShellwNav>
+          </MeetupDataProvider>
+        </MantineProvider>
+      </ColorSchemeContext.Provider>
+    </QueryClientProvider>
   );
 }
 
