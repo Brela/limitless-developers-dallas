@@ -14,44 +14,12 @@ import useWindowSize from '../../hooks/use-window-size';
 export default function MeetupList() {
   const { lightMode } = getColorMode();
   const [items, setItems] = useState<any>([]);
-
-  return (
-    <section
-      className={twMerge(
-        'border rounded-md ',
-        lightMode ? 'border-gray-100 bg-white' : 'border-gray-600 bg-zinc-700'
-      )}
-      // style={{ maxHeight: '500px', overflowY: 'scroll' }}
-    >
-      <div className="px-5 py-10">
-        <Suspense
-          fallback={
-            <>
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i}>
-                  <Skeleton height={40} radius="md" width="100%" />
-                </div>
-              ))}
-            </>
-          }
-        >
-          <Rows items={items} setItems={setItems} />
-        </Suspense>
-      </div>
-    </section>
-  );
-}
-
-function Rows({ items, setItems }: { items: any; setItems: any }) {
-  const { lightMode } = getColorMode();
-  const [loading, setLoading] = useState(true); // Initialize loading state
-  const { isMobile, isDesktop } = useWindowSize();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getEvents() {
       try {
         const data = await fetchAllEvents();
-
         setItems(data);
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -63,26 +31,38 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
     getEvents();
   }, []);
 
-  if (loading) {
-    return (
-      <>
-        {Array.from({ length: 10 }).map((_, i) => (
-          <div key={i} className="mb-10">
-            <Skeleton height={300} radius="md" width="100%" bg="#D8D8D8" />
-          </div>
-        ))}
-      </>
-    );
-  }
+  return (
+    <section
+      className={twMerge(
+        ' ',
+        lightMode ? 'border-gray-100 bg-white' : 'border-gray-600 bg-zinc-700'
+      )}
+    >
+      <div className="px-5 py-10">
+        {loading ? (
+          <>
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="mb-10">
+                <Skeleton height={300} radius="md" width="100%" bg="#f5f5f4" />
+              </div>
+            ))}
+          </>
+        ) : (
+          <Rows items={items} />
+        )}
+      </div>
+    </section>
+  );
+}
 
-  function ImgComp({ item }: { item: any }) {
+function Rows({ items }: { items: any }) {
+  const { lightMode } = getColorMode();
+  const { isMobile, isDesktop } = useWindowSize();
+
+  function ImgComp({ item, imgClassName }: { item: any; imgClassName?: string }) {
     return (
       //  <Image src={item.imageUrl} alt={item.title} height={400} width={600} />
-      <img
-        src={item.imageUrl}
-        alt={item.title}
-        className="min-w-[280px] w-[30vw] max-w-[800px] min-h-[50px] max-h-[200px] lg:max-h-[400px]"
-      />
+      <img src={item.imageUrl} alt={item.title} className={twMerge('', imgClassName)} />
     );
   }
 
@@ -93,23 +73,26 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
         items.map((item: any, index: number) => (
           <section
             key={item.id}
-            // className={twMerge('flex  mb-20', index % 2 !== 0 ? 'flex-row-reverse' : 'flex-row')}
-            className="flex gap-10 mb-20"
+            className="flex gap-10 mb-10 border rounded-md p-5 bg-stone-100 overflow-auto"
           >
-            {/* <Image src={item.imageUrl} alt={item.title} height={400} width={600} /> */}
-            <section>
-              <div className=" pb-5">
-                <div className="font-semibold text-lg ">{item.title}</div>
+            {isDesktop && (
+              <div className="">
+                <ImgComp item={item} imgClassName="min-w-[300px]" />
+              </div>
+            )}
+            <section className="w-full">
+              <div className="pb-5">
+                <div className="font-semibold text-lg break-words">{item.title}</div>
                 <div>
                   <DateTimeComponent dateTime={item.dateTime} />
                 </div>
               </div>
               {isMobile && (
-                <div className="w-[50%]">
-                  <ImgComp item={item} />
+                <div className="">
+                  <ImgComp item={item} imgClassName="max-w-[90%] py-5 mx-auto" />
                 </div>
               )}
-              <div className="">
+              <div className="break-words">
                 <Description description={item.description} />
               </div>
 
@@ -118,7 +101,6 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
                   'underline whitespace-nowrap ',
                   lightMode ? 'text-gray-800' : 'text-white'
                 )}
-                // style={{ boxShadow: "1px 1px 10px rgba(220, 222, 224, .8)" }}
                 href={item.groupLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -132,11 +114,6 @@ function Rows({ items, setItems }: { items: any; setItems: any }) {
                 </Button>
               </a>
             </section>
-            {isDesktop && (
-              <div className="w-[50%]">
-                <ImgComp item={item} />
-              </div>
-            )}
           </section>
         ))
       ) : (
