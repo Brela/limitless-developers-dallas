@@ -5,20 +5,24 @@ import { getMeetupAccessToken } from '../getMeetupAccessToken';
 
 const API_URL = 'https://api.meetup.com/gql';
 
-// Consider securely managing the access token
+let accessTokenPromise: Promise<string> | null = null;
 
-interface GraphQLResponse<T> {
-  data: any;
-  errors?: { message: string }[];
+// this allows all of the fetchGraphQL calls to use the same access token call
+async function getAccessToken(): Promise<string> {
+  if (!accessTokenPromise) {
+    accessTokenPromise = getMeetupAccessToken();
+    console.log('here');
+  }
+  return accessTokenPromise;
 }
 
 export async function fetchGraphQL(query: string, variables?: any): Promise<any> {
-  const ACCESS_TOKEN = cookies().get('accessToken')?.value;
+  let ACCESS_TOKEN = cookies().get('accessToken')?.value;
 
   if (!ACCESS_TOKEN) {
-    await getMeetupAccessToken();
+    ACCESS_TOKEN = await getAccessToken();
   }
-
+  console.log(ACCESS_TOKEN);
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -27,6 +31,9 @@ export async function fetchGraphQL(query: string, variables?: any): Promise<any>
     },
     body: JSON.stringify({ query, variables }),
   });
+
+  console.log(`Response status: ${response.status}`);
+  console.log(`Response ok: ${response.ok}`);
 
   if (!response.ok) {
     // Parse the response body to access detailed error information
@@ -44,13 +51,7 @@ export async function fetchGraphQL(query: string, variables?: any): Promise<any>
   return res.data as Promise<any>;
 }
 
-export async function fetchAllEvents() {
-  const slugs = [
-    'AWS-Dallas',
-    'reactjsdallas',
-    'dallas-software-developers-meetup',
-    'plano-prompt-engineers',
-  ];
+export async function fetchAllEvents(slugs: string[]) {
   try {
     const results = await Promise.all(
       slugs.map((slug) =>

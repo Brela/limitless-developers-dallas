@@ -12,61 +12,75 @@ import Description from './Description';
 import { DateTimeComponent } from './DateTime';
 import useWindowSize from '../../hooks/use-window-size';
 
-export default function MeetupList() {
+export default function OurMeetup() {
   const { lightMode } = getColorMode();
 
-  const slugs = [
-    'AWS-Dallas',
-    'reactjsdallas',
-    'dallas-software-developers-meetup',
-    'plano-prompt-engineers',
-  ];
+  // const slugs = ['limitless-developers-dallas'];
+  const slugs = ['limitless-developers-of-frisco'];
 
   const { data: items, isLoading: loading } = useQuery({
-    queryKey: ['meetupList'],
+    queryKey: ['ourEvent'],
     queryFn: async () => {
       const response = await fetchAllEvents(slugs);
-      const data: any = response || [];
+      // const response = await fetchAllEvents();
+      // const data: any = response || [];
+      const data: any = [];
 
       return data;
     },
     staleTime: 300000, // 5 minutes
   }) as UseQueryResult<any[], Error>;
 
-  /*   useEffect(() => {
-    async function getEvents() {
-      try {
-        const data = await fetchAllEvents();
-        setItems(data);
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    getEvents();
-  }, []); */
-
   return (
-    <section
-      className=""
-      /*       className={twMerge(
-        ' ',
-        lightMode ? 'border-gray-100 bg-white' : 'border-gray-600 bg-zinc-700'
-      )} */
-    >
-      <div className="px-5 py-5 ">
+    <section>
+      <div className="px-5 py-5">
         {loading ? (
           <>
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="mb-10">
-                <Skeleton height={300} radius="md" width="100%" bg="#f5f5f4" />
+            {Array.from({ length: 1 }).map((_, i) => (
+              <div key={i} className="">
+                <Skeleton height={100} radius="md" width="100%" bg="#f5f5f4" />
               </div>
             ))}
           </>
         ) : (
-          <Rows items={items} />
+          <>
+            {items && items.length > 0 && <Rows items={items} />}
+            {items && items.length === 0 && (
+              <div
+                className={twMerge(
+                  'flex items-center gap-10 rounded-md p-5 overflow-auto',
+                  lightMode ? 'bg-slate-200' : 'bg-slate-700'
+                )}
+              >
+                <p className="text-lg font-semibold">
+                  Limitless Developers of Dallas was created to bring the tech community together.
+                  Once we post our next meetup, it will appear here. Check out some other meetups
+                  below in the meantime and join our group on Meetup.com!
+                </p>
+                <a
+                  className={twMerge(
+                    'underline whitespace-nowrap ',
+                    lightMode ? 'text-gray-800' : 'text-white'
+                  )}
+                  href="https://www.meetup.com/limitless-developers-of-frisco/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    variant="filled"
+                    className={twMerge(
+                      ' bg-orange-500 text-lg',
+                      // lightMode ? 'text-gray-800' : 'text-white'
+                      'text-white'
+                    )}
+                  >
+                    <span className="pr-2">Join</span>
+                    <IconExternalLink size={20} className={twMerge('pl-0', 'text-white')} />
+                  </Button>
+                </a>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
@@ -89,13 +103,7 @@ function Rows({ items }: { items: any }) {
     <>
       {items ? (
         items.map((item: any, index: number) => (
-          <section
-            key={item.id}
-            className={twMerge(
-              'flex gap-10 mb-10 border rounded-md p-5  overflow-auto',
-              lightMode ? 'border-gray-100 bg-stone-100' : 'border-gray-600 bg-zinc-700'
-            )}
-          >
+          <section key={item.id}>
             {isDesktop && (
               <div className="">
                 <ImgComp item={item} imgClassName="min-w-[300px]" />

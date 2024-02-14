@@ -5,6 +5,7 @@ import MeetupList from './_homeComponents/MeetupsList';
 import SectionMain from './_homeComponents/wrappers/SectionMain';
 import H2 from './_homeComponents/wrappers/H2';
 import getColorMode from '../utils/getColorMode';
+import OurMeetup from './_homeComponents/OurMeetup';
 
 const Hub = () => {
   const { lightMode, darkMode } = getColorMode();
@@ -22,7 +23,6 @@ const Hub = () => {
           </p>
         </div>
       </section> */}
-
       {/*  ------ OUR NEXT EVENT ------ */}
       {/*      <SectionMain>
         <H2>Our Next Event</H2>
@@ -33,14 +33,21 @@ const Hub = () => {
         </div>
       </SectionMain> */}
 
-      {/*  ------ MEETUP LIST SECTION ------ */}
+      {/*  ------ OUR MEETUP ------ */}
       <SectionMain>
-        <H2>Upcoming Tech Meetups in Dallas</H2>
-        <div className={twMerge('  rounded-lg mb-20', lightMode ? 'bg-zinc-200' : 'bg-zinc-500')}>
-          <MeetupList />
+        <H2 className="">Our Meetup</H2>
+        <div className={twMerge('mb-20')}>
+          <OurMeetup />
         </div>
       </SectionMain>
 
+      {/*  ------ MEETUP LIST SECTION ------ */}
+      <SectionMain>
+        <H2 className="">Other Awesome Tech Meetups in Dallas</H2>
+        <div className={twMerge('mb-20')}>
+          <MeetupList />
+        </div>
+      </SectionMain>
       {/*  ------ OTHER ------ */}
       {/*       <SectionMain>
         <H2>Why you should go to meetups</H2>
