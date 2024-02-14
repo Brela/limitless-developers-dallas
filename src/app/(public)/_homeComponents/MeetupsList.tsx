@@ -56,7 +56,7 @@ export default function MeetupList() {
         lightMode ? 'border-gray-100 bg-white' : 'border-gray-600 bg-zinc-700'
       )} */
     >
-      <div className="px-5 py-5 ">
+      <div className="px-5 py-2 lg:py-5">
         {loading ? (
           <>
             {Array.from({ length: 10 }).map((_, i) => (

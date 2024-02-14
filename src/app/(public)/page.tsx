@@ -36,7 +36,7 @@ const Hub = () => {
       {/*  ------ OUR MEETUP ------ */}
       <SectionMain>
         <H2 className="">Our Meetup</H2>
-        <div className={twMerge('mb-20')}>
+        <div className={twMerge('mb-10 lg:mb-20')}>
           <OurMeetup />
         </div>
       </SectionMain>
@@ -44,7 +44,7 @@ const Hub = () => {
       {/*  ------ MEETUP LIST SECTION ------ */}
       <SectionMain>
         <H2 className="">Other Awesome Tech Meetups in Dallas</H2>
-        <div className={twMerge('mb-20')}>
+        <div className={twMerge('mb-10 lg:mb-20')}>
           <MeetupList />
         </div>
       </SectionMain>

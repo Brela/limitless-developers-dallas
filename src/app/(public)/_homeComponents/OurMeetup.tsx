@@ -33,7 +33,7 @@ export default function OurMeetup() {
 
   return (
     <section>
-      <div className="px-5 py-5">
+      <div className="px-5 py-2 lg:py-5">
         {loading ? (
           <>
             {Array.from({ length: 1 }).map((_, i) => (
@@ -48,11 +48,11 @@ export default function OurMeetup() {
             {items && items.length === 0 && (
               <div
                 className={twMerge(
-                  'flex items-center gap-10 rounded-md p-5 overflow-auto',
+                  'flex flex-col items-center gap-5 rounded-md p-5 overflow-auto',
                   lightMode ? 'bg-slate-200' : 'bg-slate-700'
                 )}
               >
-                <p className="text-lg font-semibold">
+                <p className="lg:text-lg font-semibold">
                   Limitless Developers of Dallas was created to bring the tech community together.
                   Once we post our next meetup, it will appear here. Check out some other meetups
                   below in the meantime and join our group on Meetup.com!
