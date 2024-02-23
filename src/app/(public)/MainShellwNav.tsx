@@ -8,6 +8,7 @@ import Link from 'next/link'; // Import Link from Next.js
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import { IconBrightnessHalf } from '@tabler/icons-react';
 import classes from './page.module.css';
 import useWindowSize from '@/src/app/hooks/use-window-size';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle';
@@ -47,7 +48,7 @@ function MainShellwNav({ children }: { children: ReactNode }) {
             />
           )}
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          {isMobile ? (
+          {isMobile && (
             // This ensures the image is on the right in mobile view
             <Group>
               <Image
@@ -58,7 +59,8 @@ function MainShellwNav({ children }: { children: ReactNode }) {
                 alt="Picture of the author"
               />
             </Group>
-          ) : (
+          )}
+          {isDesktop && (
             // Other elements for desktop or additional conditional content
             <Group justify="flex-end" style={{ flex: 1 }}>
               <Group ml="xl" gap={0} visibleFrom="sm">
@@ -89,10 +91,10 @@ function MainShellwNav({ children }: { children: ReactNode }) {
                     </div>
                   </Link>
                 ))}
+                <ColorSchemeToggle />
               </Group>
             </Group>
           )}
-          <ColorSchemeToggle />
         </Group>
       </AppShell.Header>
 
